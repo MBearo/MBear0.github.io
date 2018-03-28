@@ -3,7 +3,7 @@
 > 搭建博客的教程来自 [Hux](https://github.com/Huxpro/huxpro.github.io) 。
 > 
 
-### [我的博客在这里 &rarr;](http://mbear.top)
+### [MBear博客](http://mbear.top)
 
 把本地的笔记搬上来备个份
 
