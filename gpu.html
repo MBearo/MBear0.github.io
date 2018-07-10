@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>js gpu</title>
+		<!--<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" type="text/javascript" charset="utf-8"></script>-->
+		<script src="gpu.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="vconsole.min.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			body {}
+		</style>
+	</head>
+
+	<body>
+		<img src="hu.png" />
+		<input type="button" name="" id="" value="go" onclick="go()" />
+		<span id="start">
+			
+		</span>
+		<br />
+		<span id="end">
+			
+		</span>
+		<script type="text/javascript">
+			var vConsole = new VConsole();
+			var gpu = new GPU();
+
+			function wocao(image) {
+				const pixel = image[this.thread.y][this.thread.x];
+				//maxNum(pixel[0],pixel[1],pixel[2])
+				//minNum(pixel[0],pixel[1],pixel[2])
+				let LIM = lim(0, maxNum(pixel[0], pixel[1], pixel[2]), minNum(pixel[0], pixel[1], pixel[2]))
+				this.color(newColor(LIM, pixel[0]), newColor(LIM, pixel[1]), newColor(LIM, pixel[2]))
+				//this.color(255, 0, 0, 1);
+			}
+
+			function maxNum(a, b, c) {
+				let x = Math.max(a, b)
+				let max = Math.max(x, c)
+				return max * 255
+			}
+
+			function minNum(a, b, c) {
+				let x = Math.min(a, b)
+				let min = Math.min(x, c)
+				return min * 255
+			}
+
+			function lim(type, max, min) {
+				let LIM = 0
+				if(type == 0) {
+					// 中性色
+					LIM = 255 - (Math.abs(max - 127.5) + Math.abs(min - 127.5))
+					if(max === 0 || min === 255) {
+						return LIM
+					}
+					return LIM
+				} else if(type == 1) {
+					// 黑色
+					LIM = (127.5 - max) * 2
+					if(max > 127) {
+						return LIM
+					}
+					return LIM
+				} else if(type == 2) {
+					// 白色
+					LIM = (min - 127.5) * 2
+					if(min < 128) {
+						return LIM
+					}
+					return LIM
+				}
+
+			}
+
+			function newColor(LIM, r) {
+				r = r * 255
+				//LIM=20
+				let moveBlack = 0
+				let moveR = 20
+				let decR = LIM * r / 255;
+				let incR = LIM * (1 - r / 255)
+				let progressR = moveBlack + moveR
+				let newR = r - LIM * progressR / 100 - moveBlack * moveR * 2 / 100
+
+				let minR = r - decR
+				let maxR = r + incR
+				if(newR > maxR) {
+					newR = maxR
+				}
+				if(newR < minR) {
+					newR = minR
+				}
+				if(newR < 0) {
+					newR = 0
+				}
+				if(newR > 255) {
+					newR = 255
+				}
+				newR = newR / 255
+				return newR
+			}
+			//for(var values = [], i = 0; i < numValues; ++i) values[i] = Math.random();
+			function cao(a, b, c) {
+				let max = Math.min(a, b);
+				let xxx = 1;
+				let ss = sss[0]
+
+				//				let obj[0]=1;
+				return max
+			}
+			const render = gpu.createKernel(wocao)
+				.setOutput([690, 1035])
+				.setGraphical(true)
+				.setFunctions([wocao, maxNum, minNum, lim, newColor])
+
+			function hi(color) {
+				let decR = LIM * r / 255;
+				let incR = LIM * (1 - r / 255)
+				let minR = r - decR
+				let maxR = r + incR
+				let progressR = moveBlack + moveR
+				let newR = r - LIM * progressR / 100 - moveBlack * moveR * 2 / 100
+				return newR
+			}
+
+			function go() {
+				console.time('haha')
+				document.getElementById('start').innerText = new Date().getTime()
+				console.log(new Date().getTime())
+				var img = new Image();
+				img.src = 'hu.png';
+				img.onload = function() {
+					//ctx.drawImage(img, 0, 0);
+					//var arr = ctx.getImageData(0, 0, 500, 500).data
+					//在指定点绘制图像(原始大小)
+					//ctx.drawImage(img, x, y, width, height);
+					//在指定点绘制图像(使用指定的宽和高)
+					//myFunc(arr);
+					//console.log(myFunc(arr))
+
+					render(img);
+					const canvas = render.getCanvas();
+					document.getElementsByTagName('body')[0].appendChild(canvas);
+
+				}
+				console.timeEnd('haha')
+				document.getElementById('end').innerText = new Date().getTime()
+				console.log(new Date().getTime())
+			}
+
+			function change(options, r, g, b) {
+				var r = r
+				var g = g
+				var b = b
+				for(var i = 0; i < options.length; i++) {
+					var obj = colors(options[i])
+					r = obj[0]
+					g = obj[1]
+					b = obj[2]
+				}
+				return [r, g, b]
+			}
+
+			function colors(options, r, g, b) {
+				var type = options[0]
+				var moveR = options[1]
+				var moveG = options[2]
+				var moveB = options[3]
+				var moveBlack = options[4]
+				var r = r
+				var g = g
+				var b = b
+				var LIM = 0
+				switch(type) {
+					// 中性色
+					case 0:
+						LIM = 255 - (Math.abs(max - 127.5) + Math.abs(min - 127.5))
+						if(max === 0 || min === 255) {
+							return
+						}
+						break
+						// 黑色
+					case 1:
+						LIM = (127.5 - max) * 2
+						if(max > 127) {
+							return
+						}
+						break
+						// 白色
+					case 2:
+						LIM = (min - 127.5) * 2
+						if(min < 128) {
+							return
+						}
+						break
+					default:
+						break
+				}
+
+				var decR = LIM * r / 255
+				var decG = LIM * g / 255
+				var decB = LIM * b / 255
+
+				var incR = LIM * (1 - r / 255)
+				var incG = LIM * (1 - g / 255)
+				var incB = LIM * (1 - b / 255)
+
+				var minR = r - decR
+				var minG = g - decG
+				var minB = b - decB
+
+				var maxR = r + incR
+				var maxG = g + incG
+				var maxB = b + incB
+
+				var progressR = moveBlack + moveR
+				var progressG = moveBlack + moveG
+				var progressB = moveBlack + moveB
+
+				var newR = r - LIM * progressR / 100 - moveBlack * moveR * 2 / 100
+				var newG = g - LIM * progressG / 100 - moveBlack * moveG * 2 / 100
+				var newB = b - LIM * progressB / 100 - moveBlack * moveB * 2 / 100
+
+				return [newR, newG, newB]
+			}
+		</script>
+	</body>
+
+</html>
