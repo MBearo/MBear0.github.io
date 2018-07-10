@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>Title</title>
+    <script src="./gpu.min.js"></script>
+    <script src="vconsole.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<span id="start">
+			
+		</span>
+		<br />
+		<span id="end">
+			
+		</span>
+		<canvas id="myCanvas" width="690" height="690"></canvas>
+		<button id="invertbtn">123</button>
+		<script>
+      	var vConsole = new VConsole();
+			// const gpu = new GPU();
+			// const myFunc = gpu.createKernel(function() {
+			//   return this.thread.x;
+			// }).setOutput([100])
+			// myFunc()
+			var img = new Image();
+			img.src = 'hu.png';
+			img.onload = function() {
+				draw(this);
+			};
+			var canvas = document.getElementById('myCanvas');
+			var ctx = canvas.getContext('2d');
+
+			function draw(img) {
+
+				ctx.drawImage(img, 0, 0);
+				img.style.display = 'none';
+
+			}
+			var invert = function() {
+				var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+				var data = imageData.data;
+				// for (var i = 0; i < data.length; i += 4) {
+				//   data[i]     = 225 - data[i];     // red
+				//   data[i + 1] = 225 - data[i + 1]; // green
+				//   data[i + 2] = 225 - data[i + 2]; // blue
+				// }
+				imageData.data = data
+				ctx.putImageData(imageData, 0, 0);
+			};
+
+			var invertbtn = document.getElementById('invertbtn');
+
+			invertbtn.addEventListener('click', f);
+
+			function f() {
+				console.time('start')
+				document.getElementById('start').innerText = new Date().getTime()
+				var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+				var data = imageData.data;
+
+				for(var i = 0; i < data.length; i += 4) {
+
+					r = data[i]
+					g = data[i + 1]
+					b = data[i + 2]
+					let max = Math.max(r, g, b)
+					let min = Math.min(r, g, b)
+					let type = [{
+						type: 0,
+						r: 20,
+						g: 20,
+						b: 20,
+						black: 0
+					}]
+					for(let j = 0; j < type.length; j++) {
+						let arr = change(type[j], min, max, r, g, b)
+						data[i] = arr[0] >> 0
+						data[i + 1] = arr[1] >> 0
+						data[i + 2] = arr[2] >> 0
+						if(data[i] < 0) {
+							data[i] = 0
+						}
+						if(data[i + 1] < 0) {
+							data[i + 1] = 0
+						}
+						if(data[i + 2] < 0) {
+							data[i + 2] = 0
+						}
+						if(data[i] > 255) {
+							data[i] = 255
+						}
+						if(data[i] > 255) {
+							data[i + 1] = 255
+						}
+						if(data[i] > 255) {
+							data[i + 2] = 255
+						}
+					}
+				}
+
+				imageData.data = data
+				ctx.putImageData(imageData, 0, 0);
+				console.timeEnd('start')
+				document.getElementById('end').innerText = new Date().getTime()
+			}
+
+			function change(data, min, max, r, g, b) {
+				let type = data.type
+				let moveR = data.r
+				let moveG = data.g
+				let moveB = data.b
+				let moveBlack = data.black
+				let LIM = 0
+				switch(type) {
+					// 中性色
+					case 0:
+						LIM = 255 - (Math.abs(max - 127.5) + Math.abs(min - 127.5))
+						if(max === 0 || min === 255) {
+							return
+						}
+						break
+						// 黑色
+					case 1:
+						LIM = (127.5 - max) * 2
+						if(max > 127) {
+							return
+						}
+						break
+						// 白色
+					case 2:
+						LIM = (min - 127.5) * 2
+						if(min < 128) {
+							return
+						}
+						break
+					default:
+						break
+				}
+
+				let decR = LIM * r / 255
+				let decG = LIM * g / 255
+				let decB = LIM * b / 255
+
+				let incR = LIM * (1 - r / 255)
+				let incG = LIM * (1 - g / 255)
+				let incB = LIM * (1 - b / 255)
+
+				let minR = r - decR
+				let minG = g - decG
+				let minB = b - decB
+
+				let maxR = r + incR
+				let maxG = g + incG
+				let maxB = b + incB
+
+				let progressR = moveBlack + moveR
+				let progressG = moveBlack + moveG
+				let progressB = moveBlack + moveB
+
+				let newR = r - LIM * progressR / 100 - moveBlack * moveR * 2 / 100
+				let newG = g - LIM * progressG / 100 - moveBlack * moveG * 2 / 100
+				let newB = b - LIM * progressB / 100 - moveBlack * moveB * 2 / 100
+				return [newR, newG, newB]
+			}
+		</script>
+	</body>
+
+</html>
