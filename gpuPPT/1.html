@@ -1,17 +1,185 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link rel="stylesheet" type="text/css" href="public.css"/>
-  <title>Document</title>
-</head>
-<body>
-  <div class="content">
-      <div class="h1">
-        震惊！神经网络训练还能算滤镜？
-      </div>
-  </div>
-</body>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+		<title>Document</title>
+		<style type="text/css">
+			html,
+			body {
+				width: 100%;
+				height: 100%;
+				padding: 0;
+				margin: 0;
+				font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+				background-image: url(left.png), url(right.png);
+				background-repeat: no-repeat;
+				background-position: left, right;
+				background-size: contain;
+				overflow: hidden;
+			}
+			
+			#app {
+				height: 100%;
+			}
+			
+			.content {
+				width: 800px;
+				height: 100%;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				text-align: center;
+				margin: 0 auto;
+			}
+			
+			.h1 {
+				font-size: 36px;
+			}
+			
+			.h2 {
+				font-size: 20px;
+			}
+			
+			@keyframes jackInTheBox {
+				0% {
+					opacity: 0;
+					transform: scale(.1) rotate(30deg);
+					transform-origin: center bottom
+				}
+				50% {
+					transform: rotate(-10deg)
+				}
+				70% {
+					transform: rotate(3deg)
+				}
+				to {
+					opacity: 1;
+					transform: scale(1)
+				}
+			}
+			
+			.jackInTheBox {
+				animation-name: jackInTheBox
+			}
+			
+			.animated {
+				animation-duration: 1s;
+				animation-fill-mode: both
+			}
+			
+			.list-enter-active,
+			.list-leave-active {
+				-webkit-transition: all .5s;
+				transition: all .5s
+			}
+			
+			.list-enter,
+			.list-leave-active {
+				opacity: 0;
+				-webkit-transform: translateY(-30px);
+				transform: translateY(-30px)
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<div class="content">
+				<transition name="list" mode="out-in">
+					<div class="h1" v-if="index==0" key="0">
+						震惊！神经网络训练还能算滤镜？
+					</div>
+					<!--	</transition>-->
+					<!--<transition name="list" mode="out-in">-->
+					<div v-if="index==1" key="1">
+						<img style="width: 300px;" src="logo.jpg" />
+					</div>
+					<!--</transition>-->
+					<div v-if="index==2" key="2">
+						<img style="width: 500px;" src="yujia.png" />
+					</div>
+					<div v-if="index==3"  key="3">
+						<img style="width: 500px;" src="apple.jpg" />
+					</div>
+					<div class="h1" v-if="index==4"  key="4">
+						GPU
+						<div class="h2" style="margin-top: 20px;color: #999;">
+							与CPU不同，更适合做图像处理中逻辑少、数量大的简单矩阵计算
+						</div>
+					</div>
+					<div class="h1" v-if="index==5"  key="5">
+						能否应用到计算滤镜？
+					</div>
+					<div class="h1" v-if="index==6" style="text-align: left;"  key="6">
+						<div>1.小程序中能否使用</div>
+						<div>2.如何写GPU运行的程序</div>
+						<div>3.滤镜算法是什么</div>
+					</div>
+					<div class="h1" v-if="index==7"  key="7">
+						小程序中能否使用？
+					</div>
+					<div class="h1" v-if="index==8" style="width: 600px;"  key="8">
+						WebGL
+						<div class="h2" style="margin-top: 20px;color: #999;">
+							WebGL是一种绘图标准，允许把JS和OpenGL ES 2.0结合，提供硬件加速
+						</div>
+					</div>
+					<div class="h1" v-if="index==9"  key="9">
+						小程序
+						<==>webview
+					</div>
+					<div class="h1" v-if="index==10"  key="10">
+						如何写GPU运行的程序？
+					</div>
+					<div class="h1" v-if="index==11"  key="11">
+						GPU.js
+						<div class="h2" style="margin-top: 20px;color: #999;">
+							gpu.js是一个JavaScript中GPGPU（GPU上的通用计算）的编译库
+						</div>
+					</div>
+					<div class="h1" v-if="index==12"  key="12">
+						滤镜算法是什么？
+					</div>
+					<div class="h1" v-if="index==13"  key="13">
+						<div class="animated jackInTheBox">
+							<img style="width: 300px;" src="bang.png" />
+						</div>
+					</div>
+					<div class="h1" v-if="index==14"  key="14">
+						时间减少80%+
+					</div>
+					<div class="h1" v-if="index==15"  key="15">
+						Thank You !
+					</div>
+					<div v-if="index==16"  key="16">
+						<img src="ma.png" style="width: 300px;" />
+					</div>
+				</transition>
+			</div>
+		</div>
+
+	</body>
+	<script type="text/javascript">
+		var app = new Vue({
+			el: '#app',
+			data: {
+				index: 0,
+				message: 'Hello Vue!'
+			},
+			created() {
+				window.addEventListener('keydown', e => {
+					if(e.keyCode == 13 || e.keyCode == 39 || e.keyCode == 40) {
+						this.index++
+					} else {
+						this.index--
+					}
+				})
+			}
+		})
+	</script>
+
 </html>
