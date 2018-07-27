@@ -6,6 +6,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta http-equiv="X-UA-Compatible" content="ie=edge">
 		<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+		<script src="https://cdn.jsdelivr.net/npm/tween.js@16.3.4"></script>
 		<title>Document</title>
 		<style type="text/css">
 			html,
@@ -102,60 +103,60 @@
 					<div v-if="index==2" key="2">
 						<img style="width: 500px;" src="yujia.png" />
 					</div>
-					<div v-if="index==3"  key="3">
+					<div v-if="index==3" key="3">
 						<img style="width: 500px;" src="apple.jpg" />
 					</div>
-					<div class="h1" v-if="index==4"  key="4">
+					<div class="h1" v-if="index==4" key="4">
 						GPU
 						<div class="h2" style="margin-top: 20px;color: #999;">
 							与CPU不同，更适合做图像处理中逻辑少、数量大的简单矩阵计算
 						</div>
 					</div>
-					<div class="h1" v-if="index==5"  key="5">
+					<div class="h1" v-if="index==5" key="5">
 						能否应用到计算滤镜？
 					</div>
-					<div class="h1" v-if="index==6" style="text-align: left;"  key="6">
+					<div class="h1" v-if="index==6" style="text-align: left;" key="6">
 						<div>1.小程序中能否使用</div>
 						<div>2.如何写GPU运行的程序</div>
 						<div>3.滤镜算法是什么</div>
 					</div>
-					<div class="h1" v-if="index==7"  key="7">
+					<div class="h1" v-if="index==7" key="7">
 						小程序中能否使用？
 					</div>
-					<div class="h1" v-if="index==8" style="width: 600px;"  key="8">
+					<div class="h1" v-if="index==8" style="width: 600px;" key="8">
 						WebGL
 						<div class="h2" style="margin-top: 20px;color: #999;">
 							WebGL是一种绘图标准，允许把JS和OpenGL ES 2.0结合，提供硬件加速
 						</div>
 					</div>
-					<div class="h1" v-if="index==9"  key="9">
+					<div class="h1" v-if="index==9" key="9">
 						小程序
 						<==>webview
 					</div>
-					<div class="h1" v-if="index==10"  key="10">
+					<div class="h1" v-if="index==10" key="10">
 						如何写GPU运行的程序？
 					</div>
-					<div class="h1" v-if="index==11"  key="11">
+					<div class="h1" v-if="index==11" key="11">
 						GPU.js
 						<div class="h2" style="margin-top: 20px;color: #999;">
 							gpu.js是一个JavaScript中GPGPU（GPU上的通用计算）的编译库
 						</div>
 					</div>
-					<div class="h1" v-if="index==12"  key="12">
+					<div class="h1" v-if="index==12" key="12">
 						滤镜算法是什么？
 					</div>
-					<div class="h1" v-if="index==13"  key="13">
+					<div class="h1" v-if="index==13" key="13">
 						<div class="animated jackInTheBox">
 							<img style="width: 300px;" src="bang.png" />
 						</div>
 					</div>
-					<div class="h1" v-if="index==14"  key="14">
-						时间减少80%+
+					<div class="h1" v-if="index==14" key="14">
+						时间减少{{numbers}}%
 					</div>
-					<div class="h1" v-if="index==15"  key="15">
+					<div class="h1" v-if="index==15" key="15">
 						Thank You !
 					</div>
-					<div v-if="index==16"  key="16">
+					<div v-if="index==16" key="16">
 						<img src="ma.png" style="width: 300px;" />
 					</div>
 				</transition>
@@ -167,8 +168,8 @@
 		var app = new Vue({
 			el: '#app',
 			data: {
-				index: 0,
-				message: 'Hello Vue!'
+				index: 13,
+				numbers: 0
 			},
 			created() {
 				window.addEventListener('keydown', e => {
@@ -178,6 +179,18 @@
 						this.index--
 					}
 				})
+			},
+			watch: {
+				index: function(val, oldValue) {
+					var vm = this
+					if(val == 14) {
+						var sss=setInterval(function(){
+							if(vm.numbers<80){
+								vm.numbers++
+							}
+						},15)
+					}
+				}
 			}
 		})
 	</script>
