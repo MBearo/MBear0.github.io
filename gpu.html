@@ -144,11 +144,12 @@
 					render(img);
 					const canvas = render.getCanvas();
 					document.getElementsByTagName('body')[0].appendChild(canvas);
-
+					console.timeEnd('haha')
+					console.log(new Date().getTime())
 				}
-				console.timeEnd('haha')
+
 				document.getElementById('end').innerText = new Date().getTime()
-				console.log(new Date().getTime())
+
 			}
 
 			function change(options, r, g, b) {
