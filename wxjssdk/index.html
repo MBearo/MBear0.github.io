@@ -20,10 +20,11 @@
       </div>
       <div>
           nonceStr:<input type="text" id="n">
-      </div><div>
+      </div>
+      <div>
           signature:<input type="text" id="s">
       </div>
-
+      <button class="btn btn_primary" id="shouquan">授权</button>
       <h3 id="menu-image">图像接口</h3>
       <span class="desc">拍照或从手机相册中选图接口</span>
       <button class="btn btn_primary" id="chooseImage">chooseImage</button>
@@ -52,8 +53,8 @@
    * 邮件主题：【微信JS-SDK反馈】具体问题
    * 邮件内容说明：用简明的语言描述问题所在，并交代清楚遇到该问题的场景，可附上截屏图片，微信团队会尽快处理你的反馈。
    */
-  
-  wx.config({
+  $('#shouquan').click(function(){
+    wx.config({
       debug: false,
       appId: 'wx7e9ffe39066b6480',
       timestamp: $('#t').val().trim(),
@@ -98,6 +99,8 @@
         'openCard'
       ]
   });
+  })
+
 </script>
 
 </html>
