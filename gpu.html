@@ -15,6 +15,7 @@
 
 	<body>
 		<img src="hu.png" />
+		<!--<canvas id="myCanvas" width="200" height="200"></canvas>-->
 		<input type="button" name="" id="" value="go" onclick="go()" />
 		<span id="start">
 			
@@ -23,10 +24,23 @@
 		<span id="end">
 			
 		</span>
+		<canvas id="hahaha" width="200" height="200"></canvas>
 		<script type="text/javascript">
-			var vConsole = new VConsole();
+			//var vConsole = new VConsole();
+//			var img = new Image();
+//			img.src = 'hu.png';
+//			img.onload = function() {
+//				draw(this);
+//			};
+//			var canvas = document.getElementById('myCanvas');
+//			var ctx = canvas.getContext('2d');
+//			function draw(img) {
+//
+//				ctx.drawImage(img, 0, 0);
+//
+//			}
 			var gpu = new GPU();
-
+			
 			function wocao(image) {
 				const pixel = image[this.thread.y][this.thread.x];
 				//maxNum(pixel[0],pixel[1],pixel[2])
@@ -142,8 +156,11 @@
 					//console.log(myFunc(arr))
 
 					render(img);
-					const canvas = render.getCanvas();
-					document.getElementsByTagName('body')[0].appendChild(canvas);
+										const canvas = render.getCanvas();
+										console.log(render)
+										document.getElementsByTagName('body')[0].appendChild(canvas);
+//					var sss = document.getElementById('hahaha')
+//					render.setCanvas(sss)
 					console.timeEnd('haha')
 					console.log(new Date().getTime())
 				}
