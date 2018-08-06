@@ -6,6 +6,7 @@
 		<title></title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+		<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
 		<style type="text/css">
 			html,
 			body {
@@ -109,11 +110,13 @@
 				color: white;
 				border-color: #ff4444;
 			}
-			.qs_img{
+			
+			.qs_img {
 				width: 100%;
 			}
-			.qs_img_container{
-				width:267px;
+			
+			.qs_img_container {
+				width: 267px;
 				margin: 0 auto;
 				display: flex;
 				justify-content: center;
@@ -125,7 +128,8 @@
 
 	<body>
 		<div id="app">
-			<div class="step_first" v-if="step===0">
+			<router-view></router-view>
+			<!--<div class="step_first" v-if="step===0">
 				<img class="bg_img" src="img/bg_index.png" />
 				<div class="button_container">
 					<div class="button_go" @click="step=1">
@@ -135,8 +139,8 @@
 						测完领取惊喜<span class="color-red">福利</span>！
 					</div>
 				</div>
-			</div>
-			<div class="step_second" v-if="step===1">
+			</div>-->
+			<!--<div class="step_second" v-if="step===1">
 				<img class="bg_question bg_img" src="img/bg_question.png" />
 				<div class="page">
 					1/5
@@ -151,27 +155,89 @@
 					</div>
 				</div>
 
-			</div>
+			</div>-->
 		</div>
 		<script type="text/javascript">
+			const first = {
+				template: `
+			<div class="step_first">
+				<img class="bg_img" src="img/bg_index.png" />
+				<div class="button_container">
+					<div class="button_go" @click="$router.push('/question')">
+						看看平行世界的我
+					</div>
+					<div class="button_desc fz-12">
+						测完领取惊喜<span class="color-red">福利</span>！
+					</div>
+				</div>
+			</div>`
+			}
+			const second = {
+				template: `
+			<div class="step_second">
+				<img class="bg_question bg_img" src="img/bg_question.png" />
+				<div class="page">
+					1/5
+				</div>
+				<div class="qs_img_container">
+				    <img class="qs_img bg_img" src="img/qe1.png"/>
+				</div>
+				
+				<div class="question_btn_container">
+					<div class="question_btn" :class="{'active':item.active}" v-for="(item,index) in list" :key="index" @click="button(item)">
+						{{item.text}}
+					</div>
+				</div>
+			</div>`,
+				data() {
+					return {
+						list: [{
+							text: '男',
+							active: false
+						}, {
+							text: '女',
+							active: false
+						}]
+					}
+				},
+				methods: {
+					button: function(item) {
+						this.list.forEach(function(value) {
+							value.active = false
+						})
+						item.active = true
+					}
+				}
+			}
+			const routes = [{
+				path: '/',
+				component: first
+			}, {
+				path: '/question',
+				component: second
+			}]
+			const router = new VueRouter({
+				routes // (缩写) 相当于 routes: routes
+			})
 			var app = new Vue({
+				router,
 				el: '#app',
 				data: {
 					step: 1,
 					list: [{
 						text: '男',
-						active:false
+						active: false
 					}, {
 						text: '女',
-						active:false
+						active: false
 					}]
 				},
-				methods:{
-					button:function(item){
-						this.list.forEach(function(value){
-							value.active=false
+				methods: {
+					button: function(item) {
+						this.list.forEach(function(value) {
+							value.active = false
 						})
-						item.active=true
+						item.active = true
 					}
 				}
 			})
