@@ -1,5 +1,5 @@
 # Event Loop 浅析
-## 打印的顺序是什么？
+### 打印的顺序是什么？
 ```javascript
 setTimeout(function(){console.log(4)},0);
 new Promise(function(resolve){
@@ -15,7 +15,7 @@ console.log(3);
 ```
 
 
-## Call Stack 执行栈
+### Call Stack 执行栈
 
 当我们调用一个方法的时候，js会生成一个与这个方法对应的执行环境（context），又叫**执行上下文**。这个执行环境中存在着这个方法的**私有作用域**，**上层作用域的指向**，**方法的参数**，**这个作用域中定义的变量**以及**这个作用域的this对象**。因为js是单线程，同一时间只能执行同一个方法，于是他们在一个地方排队，这个地方就叫Call Stack（执行栈）。
 
@@ -67,13 +67,13 @@ s1加入到 sumSqrt 的 stack frame 中
 
 当函数执行结束从 stack 中弹出来时，只有对象的指针被弹出，而真正的值依然存在 heap 中，然后由垃圾回收器自动的清理回收。
 
-## Task Queue 事件队列
+### Task Queue 事件队列
 以上的过程说的都是同步代码的执行。那么当一个异步代码（如发送ajax请求数据）执行后会如何呢？前文提过，js的另一大特点是非阻塞，实现这一点的关键在于下面要说的这项机制——事件队列（Task Queue）。
 
 js引擎遇到一个异步事件后并不会一直等待其返回结果，而是会将这个事件挂起，继续执行执行栈中的其他任务。当一个异步事件返回结果后，js会将这个事件加入与当前执行栈不同的另一个队列，我们称之为事件队列。被放入事件队列不会立刻执行其回调，而是等待当前执行栈中的所有任务都执行完毕， 主线程处于闲置状态时，主线程会去查找事件队列是否有任务。如果有，那么主线程会从中取出排在第一位的事件，并把这个事件对应的回调放入执行栈中，然后执行其中的同步代码...，如此反复，这样就形成了一个无限的循环。这就是这个过程被称为Event Loop(事件循环)的原因。
 ![](https://github.com/MBearo/MBearo.github.io/raw/master/img/task-queue.png)
 
-## MacroTask与MicroTask
+### MacroTask与MicroTask
 以上的事件循环过程是一个宏观的表述，实际上因为异步任务之间并不相同，因此他们的执行优先级也有区别。不同的异步任务被分为两类：微任务（micro task）和宏任务（macro task）。
 
 以下事件属于宏任务：
@@ -113,4 +113,29 @@ console.log(3);
 3
 5
 4
+```
+### vue中nextTick
+在 Vue 中，DOM更新是异步的。
+
+当观察到数据变化时，Vue 将开启一个队列，并缓冲在同一事件循环中发生的所有数据改变。如果同一个 watcher 被多次触发，只会一次推入到队列中。这种在缓冲时去除重复数据对于避免不必要的计算和 DOM 操作上非常重要。然后，在下一个的事件循环“tick”中，Vue 刷新队列并执行实际（已去重的）工作。
+
+Vue 在内部尝试对异步队列使用原生的 Promise.then 和 MessageChannel(因为兼容性的原因，已经移除了MutationObserver)，如果执行环境不支持，会采用 setTimeout(fn, 0) 代替。
+
+而当我们希望在数据更新之后执行某些 DOM 操作，就需要使用 nextTick 函数来添加回调：
+```
+// HTML
+<div id="example">{{message}}</div>
+
+// JS
+var vm = new Vue({
+  el: '#example',
+  data: {
+    message: '123'
+  }
+})
+vm.message = 'new message' // 更改数据
+vm.$el.textContent === 'new message' // false
+Vue.nextTick(function () {
+  vm.$el.textContent === 'new message' // true
+})
 ```
