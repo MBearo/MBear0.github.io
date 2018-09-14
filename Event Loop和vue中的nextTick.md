@@ -14,9 +14,9 @@ new Promise(function(resolve){
 console.log(3);
 ```
 
-觉得很简单可以看这篇文章，
+觉得很简单可以看这篇文章，
 [从Promise来看JavaScript中的Event Loop、Tasks和Microtasks](https://github.com/creeperyang/blog/issues/21?utm_source=tuicool&utm_medium=referral)，
-或者看看下面的分析，也可以直接跳到最下面总结。
+或者看看下面的分析，也可以直接跳到最下面总结。
 
 ### Call Stack 执行栈
 
