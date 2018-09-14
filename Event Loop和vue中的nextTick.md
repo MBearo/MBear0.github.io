@@ -184,12 +184,21 @@ setTimeout(function() {
 
 ### 引用
 [Vue 中如何使用 MutationObserver 做批量处理？](https://www.zhihu.com/question/55364497/answer/144215284)
+
 [谈谈 Event Loop（事件循环）机制](https://juejin.im/post/5ac0cc38f265da238440b9ec)
+
 [JavaScript：彻底理解同步、异步和事件循环(Event Loop)](https://segmentfault.com/a/1190000004322358)
+
 [JavaScript Event Loop 机制详解与 Vue.js 中实践应用](https://segmentfault.com/a/1190000011044242)
+
 [详解JavaScript中的Event Loop（事件循环）机制](https://zhuanlan.zhihu.com/p/33058983)
+
 [Concurrency model and Event Loop](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/EventLoop)
+
 [Promise的队列与setTimeout的队列有何关联？](https://www.zhihu.com/question/36972010)
+
 [理解事件循环一(浅析)](https://github.com/ccforward/cc/issues/47)
+
 [从Promise来看JavaScript中的Event Loop、Tasks和Microtasks](https://github.com/creeperyang/blog/issues/21?utm_source=tuicool&utm_medium=referral)
+
 [深入核心，详解事件循环机制](https://www.jianshu.com/p/12b9f73c5a4f)
