@@ -14,6 +14,9 @@ new Promise(function(resolve){
 console.log(3);
 ```
 
+觉得很简单可以看这篇文章，
+[从Promise来看JavaScript中的Event Loop、Tasks和Microtasks](https://github.com/creeperyang/blog/issues/21?utm_source=tuicool&utm_medium=referral)，
+或者看看下面的分析，也可以直接跳到最下面总结。
 
 ### Call Stack 执行栈
 
@@ -74,9 +77,10 @@ js引擎遇到一个异步事件后并不会一直等待其返回结果，而是
 ![](https://github.com/MBearo/MBearo.github.io/raw/master/img/task-queue.png)
 
 ### MacroTask与MicroTask
-以上的事件循环过程是一个宏观的表述，实际上因为异步任务之间并不相同，因此他们的执行优先级也有区别。不同的异步任务被分为两类：微任务（micro task）和宏任务（macro task）。
+以上的事件循环过程是一个宏观的表述，实际上因为异步任务之间并不相同，因此他们的执行优先级也有区别。不同的异步任务被分为两类：微任务（Micro Task）和宏任务（Macro Task）。
 
 以下事件属于宏任务：
+* script
 * setTimeout
 * setInterval
 * setImmediate
@@ -117,7 +121,7 @@ console.log(3);
 ### vue中nextTick
 在 Vue 中，DOM更新是异步的。
 
-当观察到数据变化时，Vue 将开启一个队列，并缓冲在同一事件循环中发生的所有数据改变。如果同一个 watcher 被多次触发，只会一次推入到队列中。这种在缓冲时去除重复数据对于避免不必要的计算和 DOM 操作上非常重要。然后，在下一个的事件循环“tick”中，Vue 刷新队列并执行实际（已去重的）工作。
+当观察到数据变化时，Vue 将开启一个队列，并缓冲在同一事件循环中发生的所有数据改变。如果同一个 watcher 被多次触发，只会一次推入到队列中。这种在缓冲时去除重复数据对于避免不必要的计算和 DOM 操作上非常重要。然后，在下一个的事件循环`tick`中，Vue 刷新队列并执行实际（已去重的）工作。
 
 Vue 在内部尝试对异步队列使用原生的 Promise.then 和 MessageChannel(因为兼容性的原因，已经移除了MutationObserver)，如果执行环境不支持，会采用 setTimeout(fn, 0) 代替。
 
@@ -139,3 +143,41 @@ Vue.nextTick(function () {
   vm.$el.textContent === 'new message' // true
 })
 ```
+
+### 总结
+Event Loop如果深究，涉及到大量的相关知识。包括运行环境（浏览器，node）、内核、内核版本、各种规范等等。问题的最后都指向了不同引擎的底层实现，所以我认为只要了解到一定程度即可，有能力在深究。
+
+* JavaScript的一大特点就是单线程，而这个线程中拥有唯一的一个Event Loop(事件循环)。
+* 在新标准中的Web Work涉及到多线程，但是并不是真正的多线程，理解成Web Work是主线程的子线程即可。
+* JavaScript代码的执行过程中，除了依靠Call Stack(函数调用栈)来搞定函数的执行顺序外，还依靠Task Queue(任务队列)来搞定异步部分。
+* 一个线程中，Event Loop(事件循环)是唯一的,但是可以拥有多个Task Queue（事件队列）
+* 相同任务源只能在一个Task Queue（事件队列），不同任务源可以放在不同队列
+* 任务队列又分为MacroTask（宏任务）与MicroTask（微任务），在最新标准中，它们被分别称为Task与Jobs。也有一种叫法Task默认指代MacroTask（宏任务），MicroTask（微任务）才是MicroTask。
+* MacroTask（宏任务）大概包括：
+  * script(整体代码)
+  * setTimeout
+  * setInterval
+  * setImmediate
+  * I/O
+  * UI rendering
+* MicroTask（微任务）大概包括：
+  * process.nextTick
+  * Promise（原生的）
+  * Object.observe （已废弃）
+  * MutaionObserver （兼容性问题，废了）
+  * MessageChannel（vue中 nextTick 实现原理）
+* setTimeout/Promise等我们称之为任务源。而进入任务队列的是他们指定的具体执行任务。
+
+```javascript
+// setTimeout中的回调函数才是进入任务队列的任务
+setTimeout(function() {
+    console.log('xxxx');
+})
+// 非常多的同学对于setTimeout的理解存在偏差。所以大概说一下误解：
+// setTimeout作为一个任务分发器，这个函数会立即执行，而它所要分发的任务，也就是它的第一个参数，才是延迟执行
+```
+
+* 来自不同任务源的任务会进入到不同的任务队列。其中setTimeout与setInterval是同源的。
+* setTimeout有4ms的延迟，已经标准化了
+* 事件循环的顺序，决定了JavaScript代码的执行顺序。它从script(整体代码)开始第一次循环。之后全局上下文进入函数调用栈。直到调用栈清空(只剩全局)，然后执行所有的MicroTask。当所有可执行的MicroTask执行完毕之后。循环再次从MacroTask开始，找到其中一个任务队列执行完毕，然后再执行所有的MicroTask，这样一直循环下去。
+* 每一个任务的执行，无论是MacroTask还是MicroTask，都是借助Call Stack(执行栈)来完成。
