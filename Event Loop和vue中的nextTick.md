@@ -181,3 +181,15 @@ setTimeout(function() {
 * setTimeout有4ms的延迟，已经标准化了
 * 事件循环的顺序，决定了JavaScript代码的执行顺序。它从script(整体代码)开始第一次循环。之后全局上下文进入函数调用栈。直到调用栈清空(只剩全局)，然后执行所有的MicroTask。当所有可执行的MicroTask执行完毕之后。循环再次从MacroTask开始，找到其中一个任务队列执行完毕，然后再执行所有的MicroTask，这样一直循环下去。
 * 每一个任务的执行，无论是MacroTask还是MicroTask，都是借助Call Stack(执行栈)来完成。
+
+### 引用
+![Vue 中如何使用 MutationObserver 做批量处理？](https://www.zhihu.com/question/55364497/answer/144215284)
+![谈谈 Event Loop（事件循环）机制](https://juejin.im/post/5ac0cc38f265da238440b9ec)
+![JavaScript：彻底理解同步、异步和事件循环(Event Loop)](https://segmentfault.com/a/1190000004322358)
+![JavaScript Event Loop 机制详解与 Vue.js 中实践应用](https://segmentfault.com/a/1190000011044242)
+![详解JavaScript中的Event Loop（事件循环）机制](https://zhuanlan.zhihu.com/p/33058983)
+![Concurrency model and Event Loop](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/EventLoop)
+![Promise的队列与setTimeout的队列有何关联？](https://www.zhihu.com/question/36972010)
+![理解事件循环一(浅析)](https://github.com/ccforward/cc/issues/47)
+![从Promise来看JavaScript中的Event Loop、Tasks和Microtasks](https://github.com/creeperyang/blog/issues/21?utm_source=tuicool&utm_medium=referral)
+![深入核心，详解事件循环机制](https://www.jianshu.com/p/12b9f73c5a4f)
